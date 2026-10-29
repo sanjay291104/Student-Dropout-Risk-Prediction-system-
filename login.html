@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}Login | Pulse.edu{% endblock %}
+
+{% block content %}
+<section class="auth-shell">
+  <div class="auth-card">
+    <div class="auth-head">
+      <span class="brand-mark-lg">
+        <svg width="42" height="42" viewBox="0 0 30 30" fill="none">
+          <circle cx="15" cy="15" r="13" stroke="url(#g2)" stroke-width="2.5"/>
+          <path d="M15 7v8l5.5 3.2" stroke="url(#g2)" stroke-width="2.5" stroke-linecap="round"/>
+          <defs><linearGradient id="g2" x1="0" y1="0" x2="30" y2="30"><stop stop-color="#4C3CF0"/><stop offset="1" stop-color="#F0509B"/></linearGradient></defs>
+        </svg>
+      </span>
+      <h1>Welcome back</h1>
+      <p>Log in to access your dropout risk dashboard.</p>
+    </div>
+
+    <form method="POST" action="{{ url_for('login') }}" id="loginForm" novalidate>
+      <div class="form-group">
+        <label for="email">Email address</label>
+        <input type="email" class="form-control" id="email" name="email" placeholder="you@institution.edu" required>
+        <div class="field-error" id="emailError">Please enter a valid email address.</div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div class="password-wrap">
+          <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
+          <button type="button" class="password-toggle" id="togglePwd">SHOW</button>
+        </div>
+      </div>
+
+      <div class="checkbox-row">
+        <input type="checkbox" id="remember" name="remember">
+        <label for="remember">Keep me signed in on this device</label>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block btn-lg">Log In</button>
+    </form>
+
+    <div class="auth-foot">
+      Don't have an account? <a href="{{ url_for('register') }}">Create one</a>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  // Show/hide password
+  const toggleBtn = document.getElementById('togglePwd');
+  const pwdInput = document.getElementById('password');
+  if (toggleBtn) {
+    toggleBtn.addEventListener('click', () => {
+      const isPwd = pwdInput.type === 'password';
+      pwdInput.type = isPwd ? 'text' : 'password';
+      toggleBtn.textContent = isPwd ? 'HIDE' : 'SHOW';
+    });
+  }
+
+  // Simple client-side email validation before submit
+  const loginForm = document.getElementById('loginForm');
+  const emailInput = document.getElementById('email');
+  const emailError = document.getElementById('emailError');
+  loginForm.addEventListener('submit', function (e) {
+    const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value.trim());
+    if (!emailValid) {
+      e.preventDefault();
+      emailError.style.display = 'block';
+      emailInput.style.borderColor = '#F0523C';
+    }
+  });
+  emailInput.addEventListener('input', () => {
+    emailError.style.display = 'none';
+    emailInput.style.borderColor = '';
+  });
+</script>
+{% endblock %}

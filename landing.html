@@ -1,0 +1,182 @@
+{% extends "base.html" %}
+{% block title %}Pulse.edu | Predict. Prevent. Retain.{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+  <div class="hero-inner">
+    <div class="reveal in-view">
+      <span class="eyebrow"><span class="eyebrow-dot"></span> ML-Powered Early Warning System</span>
+      <h1>Spot the student<br>about to <span class="grad">drop out</span> —<br>before they do.</h1>
+      <p class="lead">
+        Pulse.edu analyzes attendance, grades, engagement and financial signals to flag
+        at-risk students weeks in advance, then hands faculty a concrete plan of action —
+        not just a probability score.
+      </p>
+      <div class="hero-cta-row">
+        {% if session.get('user_id') %}
+          <a href="{{ url_for('dashboard') }}" class="btn btn-primary btn-lg">Go to Dashboard →</a>
+        {% else %}
+          <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg">Start Predicting →</a>
+          <a href="{{ url_for('about') }}" class="btn btn-outline btn-lg">How it works</a>
+        {% endif %}
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat"><b data-count="10000" data-suffix="+">0</b><span>Student records analyzed</span></div>
+        <div class="hero-stat"><b data-count="{{ '%.1f'|format(9 if true else 0) }}" data-decimals="1" data-suffix="%">0</b><span>Best model accuracy</span></div>
+        <div class="hero-stat"><b data-count="7">0</b><span>Intervention categories</span></div>
+      </div>
+    </div>
+
+    <div class="reveal in-view">
+      <div class="risk-gauge-card">
+        <span class="rg-label">LIVE PREVIEW</span>
+        <div class="rg-title">Dropout Risk Gauge</div>
+        <div class="gauge-wrap">
+          <svg width="220" height="130" viewBox="0 0 200 110">
+            <defs>
+              <linearGradient id="gaugeGrad" x1="0" y1="0" x2="200" y2="0">
+                <stop offset="0%" stop-color="#22C58B"/>
+                <stop offset="50%" stop-color="#F0A83C"/>
+                <stop offset="100%" stop-color="#F0523C"/>
+              </linearGradient>
+            </defs>
+            <path d="M12 100 A88 88 0 0 1 188 100" fill="none" stroke="#EFF1FB" stroke-width="16" stroke-linecap="round"/>
+            <path d="M12 100 A88 88 0 0 1 188 100" fill="none" stroke="url(#gaugeGrad)" stroke-width="16" stroke-linecap="round"/>
+            <g class="gauge-needle" transform-origin="100 100">
+              <line x1="100" y1="100" x2="100" y2="28" stroke="#12163B" stroke-width="4" stroke-linecap="round"/>
+              <circle cx="100" cy="100" r="7" fill="#12163B"/>
+            </g>
+          </svg>
+          <div class="gauge-value">
+            <b>62%</b>
+            <span>Risk Score</span>
+          </div>
+        </div>
+        <div class="rg-legend">
+          <span class="low">Low</span>
+          <span class="med">Medium</span>
+          <span class="high">High</span>
+        </div>
+        <div class="rg-factors">
+          <span class="rg-chip">Attendance 68%</span>
+          <span class="rg-chip">CGPA 1.9</span>
+          <span class="rg-chip">Stress Index 7.4</span>
+          <span class="rg-chip">3 late assignments</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt">
+  <div class="section-head reveal">
+    <span class="eyebrow"><span class="eyebrow-dot"></span> Platform</span>
+    <h2>Everything faculty need to act early</h2>
+    <p>A single dashboard connecting prediction, explanation, and intervention — so risk scores turn into real support plans.</p>
+  </div>
+  <div class="feature-grid">
+    <div class="feature-card reveal" style="--accent:var(--c1)">
+      <div class="feature-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg></div>
+      <h3>Multi-model prediction engine</h3>
+      <p>Logistic Regression, Decision Tree, Random Forest and XGBoost are trained and benchmarked so the most reliable model always powers predictions.</p>
+    </div>
+    <div class="feature-card reveal" style="--accent:var(--c5)">
+      <div class="feature-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></div>
+      <h3>Early-warning scoring</h3>
+      <p>Attendance, GPA trends, stress index and financial signals are combined into a single, explainable risk percentage per student.</p>
+    </div>
+    <div class="feature-card reveal" style="--accent:var(--c9)">
+      <div class="feature-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 7l10 5 10-5-10-5Z"/><path d="m2 17 10 5 10-5"/><path d="m2 12 10 5 10-5"/></svg></div>
+      <h3>Personalized interventions</h3>
+      <p>Every prediction ships with a ranked action plan — counseling, remedial classes, mentoring or financial aid guidance — tailored to that student's risk factors.</p>
+    </div>
+    <div class="feature-card reveal" style="--accent:var(--c12)">
+      <div class="feature-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div>
+      <h3>Explainable outputs</h3>
+      <p>Feature-importance breakdowns show faculty exactly which factors are driving each student's risk score — no black box.</p>
+    </div>
+    <div class="feature-card reveal" style="--accent:var(--c13)">
+      <div class="feature-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
+      <h3>Prediction history</h3>
+      <p>Every assessment is logged with a timestamp so mentors can track a student's risk trend across the semester.</p>
+    </div>
+    <div class="feature-card reveal" style="--accent:var(--c3)">
+      <div class="feature-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+      <h3>Secure faculty accounts</h3>
+      <p>Password-protected logins keep student data restricted to authenticated staff only.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-head reveal">
+    <span class="eyebrow"><span class="eyebrow-dot"></span> Process</span>
+    <h2>From raw data to a support plan in four steps</h2>
+  </div>
+  <div class="process-track reveal">
+    <div class="process-steps">
+      <div class="process-step">
+        <div class="process-num" style="--accent:var(--c1)">1</div>
+        <h4>Collect signals</h4>
+        <p>Attendance, GPA, backlogs, stress index and financial data are entered or imported per student.</p>
+      </div>
+      <div class="process-step">
+        <div class="process-num" style="--accent:var(--c5)">2</div>
+        <h4>Preprocess &amp; encode</h4>
+        <p>Missing values are imputed, categorical fields encoded, and features scaled for the model.</p>
+      </div>
+      <div class="process-step">
+        <div class="process-num" style="--accent:var(--c9)">3</div>
+        <h4>Predict risk</h4>
+        <p>The best-performing trained model (Random Forest / XGBoost) scores the student's dropout probability.</p>
+      </div>
+      <div class="process-step">
+        <div class="process-num" style="--accent:var(--c12)">4</div>
+        <h4>Recommend action</h4>
+        <p>Rule-based logic maps risk drivers to concrete interventions faculty can act on immediately.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-tight">
+  <div class="stat-band reveal">
+    <div class="stat-band-grid">
+      <div><b data-count="10000" data-suffix="+">0</b><span>Records in training set</span></div>
+      <div><b data-count="9" data-suffix=" ML models">0</b><span>Trained &amp; benchmarked</span></div>
+      <div><b data-count="80.6" data-decimals="1" data-suffix="%">0</b><span>Random Forest accuracy</span></div>
+      <div><b data-count="7">0</b><span>Intervention types</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt">
+  <div class="cta-band reveal">
+    <h2>Ready to identify your at-risk students?</h2>
+    <p>Create a free faculty account and run your first prediction in under a minute.</p>
+    {% if session.get('user_id') %}
+      <a href="{{ url_for('dashboard') }}" class="btn btn-primary btn-lg">Go to Dashboard</a>
+    {% else %}
+      <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg">Create Free Account</a>
+    {% endif %}
+  </div>
+</section>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  // Subtle live-preview gauge value cycling on the landing hero (purely illustrative)
+  (function () {
+    const valueEl = document.querySelector('.gauge-value b');
+    if (!valueEl) return;
+    const demoValues = [62, 74, 55, 68, 81, 47];
+    let i = 0;
+    setInterval(() => {
+      i = (i + 1) % demoValues.length;
+      valueEl.textContent = demoValues[i] + '%';
+    }, 2600);
+  })();
+</script>
+{% endblock %}

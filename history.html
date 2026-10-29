@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block title %}History | Pulse.edu{% endblock %}
+
+{% block content %}
+<div class="dash-shell">
+  <div class="dash-header">
+    <div>
+      <h1>Prediction History</h1>
+      <p>Every risk assessment you've run, with full details on demand.</p>
+    </div>
+    <a href="{{ url_for('dashboard') }}" class="btn btn-primary">+ New Prediction</a>
+  </div>
+
+  {% if records %}
+  <div class="history-table-wrap">
+    <table class="history-table">
+      <thead>
+        <tr>
+          <th>Student</th>
+          <th>Risk Level</th>
+          <th>Probability</th>
+          <th>Date</th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in records %}
+        <tr>
+          <td><strong>{{ r.student_name }}</strong></td>
+          <td><span class="risk-badge {{ r.risk_level }}">{{ r.risk_level }}</span></td>
+          <td style="font-family:var(--font-mono);">{{ r.probability }}%</td>
+          <td style="color:var(--muted); font-size:0.85rem;">{{ r.created_at }}</td>
+          <td><button class="row-toggle" onclick="toggleDetail('{{ r.id }}')">View details</button></td>
+          <td>
+            <form method="POST" action="{{ url_for('delete_history', record_id=r.id) }}" onsubmit="return confirm('Delete this record?');">
+              <button type="submit" class="del-btn" title="Delete">🗑</button>
+            </form>
+          </td>
+        </tr>
+        <tr class="detail-row" id="detail-{{ r.id }}">
+          <td colspan="6">
+            <div class="detail-inner">
+              <div class="chip-grid" style="margin-bottom:14px;">
+                <span class="chip">GPA: {{ r.input_data.GPA }}</span>
+                <span class="chip">CGPA: {{ r.input_data.CGPA }}</span>
+                <span class="chip">Attendance: {{ r.input_data.Attendance_Rate }}%</span>
+                <span class="chip">Stress Index: {{ r.input_data.Stress_Index }}</span>
+                <span class="chip">Department: {{ r.input_data.Department }}</span>
+                <span class="chip">Semester: {{ r.input_data.Semester }}</span>
+                <span class="chip">Family Income: ₹{{ r.input_data.Family_Income }}</span>
+              </div>
+              <strong style="font-size:0.85rem;">Recommended Interventions</strong>
+              <div class="rec-list mt-8">
+                {% for rec in r.recommendations %}
+                <div class="rec-item">
+                  <div class="rec-icon">
+                    {% if rec.icon == 'calendar' %}📅{% elif rec.icon == 'book' %}📘{% elif rec.icon == 'clock' %}⏱️{% elif rec.icon == 'heart' %}💙{% elif rec.icon == 'money' %}💰{% elif rec.icon == 'balance' %}⚖️{% elif rec.icon == 'map' %}🗺️{% else %}✅{% endif %}
+                  </div>
+                  <div>
+                    <h4>{{ rec.title }}</h4>
+                    <p>{{ rec.detail }}</p>
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <svg width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="#C9CBEF" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+    <h3>No predictions yet</h3>
+    <p>Run your first dropout risk assessment to see it appear here.</p>
+    <a href="{{ url_for('dashboard') }}" class="btn btn-primary">Run a Prediction</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  function toggleDetail(id) {
+    const row = document.getElementById('detail-' + id);
+    if (row) row.classList.toggle('open');
+  }
+</script>
+{% endblock %}

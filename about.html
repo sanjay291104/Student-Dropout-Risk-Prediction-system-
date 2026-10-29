@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% block title %}About | Pulse.edu{% endblock %}
+
+{% block content %}
+
+<section class="about-hero">
+  <div class="container">
+    <span class="eyebrow"><span class="eyebrow-dot"></span> B.Tech Major Project · CSE</span>
+    <h1>Student Dropout Risk Prediction &amp; Intervention Recommendation System</h1>
+    <p>
+      A machine-learning early-warning system that goes beyond binary dropout classification —
+      pairing every prediction with an explainable, personalized intervention plan for faculty.
+    </p>
+  </div>
+</section>
+
+<section class="section-tight">
+  <div class="container" style="max-width:820px;">
+    <div class="panel">
+      <h2 style="margin-bottom:14px;">Abstract</h2>
+      <p style="color:var(--ink-soft); line-height:1.8; font-size:0.96rem;">
+        Student dropout is a major challenge in higher education that affects both students and
+        institutions. Existing studies mainly focus on predicting dropout using academic data and
+        machine learning models, with limited focus on intervention and decision support. This
+        project uses student-related factors — academic performance, attendance, and engagement
+        data — to train Logistic Regression, Decision Tree, Random Forest, and XGBoost models,
+        comparing them on accuracy, precision, recall, and F1-score. The system goes further than
+        prediction: it generates explainable, personalized intervention recommendations so
+        institutions can take timely action to improve student retention.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt" id="models">
+  <div class="section-head reveal">
+    <span class="eyebrow"><span class="eyebrow-dot"></span> Benchmarks</span>
+    <h2>Existing system vs. proposed system</h2>
+    <p>Both approaches were trained on the same 10,000-record dataset for a fair comparison.</p>
+  </div>
+
+  <div class="compare-wrap reveal">
+    <div class="compare-col">
+      <h3>Existing System <span class="tag tag-existing">baseline</span></h3>
+      {% for name, m in metrics.existing_system.items() %}
+      <div class="bar-row">
+        <div class="bar-row-top"><span>{{ name }}</span><b>{{ m.accuracy }}%</b></div>
+        <div class="bar-track"><div class="bar-fill" data-bar-width="{{ m.accuracy }}" style="width:0; background:linear-gradient(90deg,#8B3CF0,#C43CF0);"></div></div>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="compare-col">
+      <h3>Proposed System <span class="tag tag-proposed">this project</span></h3>
+      {% for name, m in metrics.proposed_system.items() %}
+      <div class="bar-row">
+        <div class="bar-row-top"><span>{{ name }}{% if name == metrics.best_model %} ⭐{% endif %}</span><b>{{ m.accuracy }}%</b></div>
+        <div class="bar-track"><div class="bar-fill" data-bar-width="{{ m.accuracy }}" style="width:0; background:linear-gradient(90deg,#22C58B,#3CE0AE);"></div></div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-head reveal">
+    <span class="eyebrow"><span class="eyebrow-dot"></span> Why it's different</span>
+    <h2>Limitations of existing systems</h2>
+  </div>
+  <div class="limitation-grid reveal">
+    <div class="limitation-card"><span class="x-icon">✕</span>Binary classification only — no further guidance for faculty.</div>
+    <div class="limitation-card"><span class="x-icon">✕</span>Focused on prediction rather than prevention.</div>
+    <div class="limitation-card"><span class="x-icon">✕</span>No personalized intervention strategies per student.</div>
+    <div class="limitation-card"><span class="x-icon">✕</span>Struggles with complex nonlinear relationships in data.</div>
+    <div class="limitation-card"><span class="x-icon">✕</span>Requires manual follow-up by faculty after prediction.</div>
+  </div>
+</section>
+
+<section class="section section-alt">
+  <div class="section-head reveal">
+    <span class="eyebrow"><span class="eyebrow-dot"></span> Team</span>
+    <h2>Project Team</h2>
+    <p>Department of Computer Science &amp; Engineering, TKREC</p>
+  </div>
+  <div class="team-grid reveal">
+    <div class="team-card">
+      <div class="team-avatar" style="background:var(--c1);">AV</div>
+      <h4>A. Venkata Sai</h4>
+      <span style="color:var(--muted); font-size:0.82rem;">23R91A0505</span>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar" style="background:var(--c5);">CS</div>
+      <h4>CH. Sanjay</h4>
+      <span style="color:var(--muted); font-size:0.82rem;">23R91A0564</span>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar" style="background:var(--c9);">BS</div>
+      <h4>B. Sravanthi</h4>
+      <span style="color:var(--muted); font-size:0.82rem;">23R91A0552</span>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar" style="background:var(--c12);">BS</div>
+      <h4>B. Sindhuja</h4>
+      <span style="color:var(--muted); font-size:0.82rem;">24R95A0504</span>
+    </div>
+  </div>
+  <p class="text-center mt-40" style="color:var(--muted); font-size:0.9rem;">
+    Supervisor: <strong style="color:var(--ink);">Dr. S. Sanjeeva Rao</strong>, Associate Professor &nbsp;·&nbsp;
+    HOD: <strong style="color:var(--ink);">Dr. CH. V. Phani Krishna</strong> &nbsp;·&nbsp;
+    Project Co-ordinator: <strong style="color:var(--ink);">Mrs. P. Swetha</strong>
+  </p>
+</section>
+
+<section class="section" id="references">
+  <div class="section-head reveal">
+    <span class="eyebrow"><span class="eyebrow-dot"></span> Citations</span>
+    <h2>References</h2>
+  </div>
+  <div class="ref-list reveal">
+    <div class="ref-item"><span class="ref-num">[1]</span><span>E. E. Osemwegie and F. I. Amadin, "Student Dropout Prediction Using Machine Learning," FUDMA Journal of Sciences, vol. 7, no. 6, pp. 347–353, Dec. 2023.</span></div>
+    <div class="ref-item"><span class="ref-num">[2]</span><span>N. Mduma, K. Kalegele, and D. Machuve, "A Survey of Machine Learning Approaches and Techniques for Student Dropout Prediction," Data Science Journal, vol. 18, no. 14, pp. 1–10, 2019.</span></div>
+    <div class="ref-item"><span class="ref-num">[3]</span><span>B. Duro, A. Gomes, F. B. Correia, A. R. Borges, and J. Bernardino, "Machine Learning and Deep Learning for Dropout Prediction in Higher Education: A Review," Computers, vol. 15, no. 3, Art. no. 164, 2026.</span></div>
+    <div class="ref-item"><span class="ref-num">[4]</span><span>L. Breiman, "Random Forests," Machine Learning, vol. 45, no. 1, pp. 5–32, 2001.</span></div>
+    <div class="ref-item"><span class="ref-num">[5]</span><span>J. H. Friedman, "Greedy Function Approximation: A Gradient Boosting Machine," The Annals of Statistics, vol. 29, no. 5, pp. 1189–1232, 2001.</span></div>
+    <div class="ref-item"><span class="ref-num">[6]</span><span>T. Chen and C. Guestrin, "XGBoost: A Scalable Tree Boosting System," in Proc. 22nd ACM SIGKDD Int. Conf. on Knowledge Discovery and Data Mining (KDD), 2016, pp. 785–794.</span></div>
+    <div class="ref-item"><span class="ref-num">[7]</span><span>C. M. Bishop, Pattern Recognition and Machine Learning. New York, NY, USA: Springer, 2006.</span></div>
+  </div>
+</section>
+
+{% endblock %}

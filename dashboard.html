@@ -1,0 +1,299 @@
+{% extends "base.html" %}
+{% block title %}Dashboard | Pulse.edu{% endblock %}
+
+{% block content %}
+<div class="dash-shell">
+  <div class="dash-header">
+    <div>
+      <h1>Welcome, {{ session.get('full_name', 'Faculty') }} 👋</h1>
+      <p>Enter a student's profile below to generate a dropout risk score and intervention plan.</p>
+    </div>
+    <a href="{{ url_for('history') }}" class="btn btn-outline">View Prediction History →</a>
+  </div>
+
+  <div class="dash-grid">
+
+    <!-- ===================== PREDICTION FORM ===================== -->
+    <div class="panel">
+      <h2>New Risk Assessment</h2>
+      <p class="panel-sub">Powered by <strong>{{ best_model_name }}</strong>, the best-performing proposed model.</p>
+
+      <form method="POST" action="{{ url_for('dashboard') }}" id="predictForm" novalidate>
+
+        <div class="form-grid">
+          <div class="form-section-label">Student Details</div>
+
+          <div class="form-group full">
+            <label for="student_name">Student Name</label>
+            <input type="text" class="form-control" id="student_name" name="student_name" placeholder="e.g. A. Venkata Sai" required>
+          </div>
+
+          <div class="form-group">
+            <label for="Age">Age</label>
+            <input type="number" step="0.1" class="form-control" name="Age" id="Age" placeholder="20" min="16" max="35" required>
+          </div>
+          <div class="form-group">
+            <label for="Gender">Gender</label>
+            <select class="form-control" name="Gender" id="Gender" required>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="Department">Department</label>
+            <select class="form-control" name="Department" id="Department" required>
+              <option value="CS">Computer Science</option>
+              <option value="Engineering">Engineering</option>
+              <option value="Business">Business</option>
+              <option value="Science">Science</option>
+              <option value="Arts">Arts</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="Semester">Year / Semester</label>
+            <select class="form-control" name="Semester" id="Semester" required>
+              <option value="Year 1">Year 1</option>
+              <option value="Year 2">Year 2</option>
+              <option value="Year 3">Year 3</option>
+              <option value="Year 4">Year 4</option>
+            </select>
+          </div>
+
+          <div class="form-section-label">Academic Performance</div>
+
+          <div class="form-group">
+            <label for="GPA">GPA (0–4)</label>
+            <input type="number" step="0.01" class="form-control" name="GPA" id="GPA" placeholder="2.5" min="0" max="4" required>
+          </div>
+          <div class="form-group">
+            <label for="Semester_GPA">Semester GPA (0–4)</label>
+            <input type="number" step="0.01" class="form-control" name="Semester_GPA" id="Semester_GPA" placeholder="2.5" min="0" max="4" required>
+          </div>
+          <div class="form-group">
+            <label for="CGPA">CGPA (0–4)</label>
+            <input type="number" step="0.01" class="form-control" name="CGPA" id="CGPA" placeholder="2.5" min="0" max="4" required>
+          </div>
+          <div class="form-group">
+            <label for="Assignment_Delay_Days">Avg. Assignment Delay (days)</label>
+            <input type="number" step="1" class="form-control" name="Assignment_Delay_Days" id="Assignment_Delay_Days" placeholder="2" min="0" max="30" required>
+          </div>
+
+          <div class="form-section-label">Engagement &amp; Behavior</div>
+
+          <div class="form-group full">
+            <label for="Attendance_Rate">Attendance Rate: <span id="attVal" class="range-val">80%</span></label>
+            <div class="range-row">
+              <input type="range" name="Attendance_Rate" id="Attendance_Rate" min="0" max="100" value="80" oninput="attVal.textContent=this.value+'%'">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="Study_Hours_per_Day">Study Hours / Day</label>
+            <input type="number" step="0.1" class="form-control" name="Study_Hours_per_Day" id="Study_Hours_per_Day" placeholder="3" min="0" max="14" required>
+          </div>
+          <div class="form-group full">
+            <label for="Stress_Index">Stress Index (0–10): <span id="stressVal" class="range-val">5</span></label>
+            <div class="range-row">
+              <input type="range" name="Stress_Index" id="Stress_Index" min="0" max="10" step="0.1" value="5" oninput="stressVal.textContent=this.value">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="Internet_Access">Internet Access</label>
+            <select class="form-control" name="Internet_Access" id="Internet_Access" required>
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="Travel_Time_Minutes">Travel Time (minutes)</label>
+            <input type="number" step="1" class="form-control" name="Travel_Time_Minutes" id="Travel_Time_Minutes" placeholder="30" min="0" max="300" required>
+          </div>
+
+          <div class="form-section-label">Financial &amp; Family Background</div>
+
+          <div class="form-group">
+            <label for="Family_Income">Family Income (₹ / year)</label>
+            <input type="number" step="100" class="form-control" name="Family_Income" id="Family_Income" placeholder="40000" min="0" required>
+          </div>
+          <div class="form-group">
+            <label for="Parental_Education">Parental Education</label>
+            <select class="form-control" name="Parental_Education" id="Parental_Education" required>
+              <option value="High School">High School</option>
+              <option value="Bachelor">Bachelor</option>
+              <option value="Master">Master</option>
+              <option value="PhD">PhD</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="Part_Time_Job">Part-Time Job</label>
+            <select class="form-control" name="Part_Time_Job" id="Part_Time_Job" required>
+              <option value="No">No</option>
+              <option value="Yes">Yes</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="Scholarship">Scholarship</label>
+            <select class="form-control" name="Scholarship" id="Scholarship" required>
+              <option value="No">No</option>
+              <option value="Yes">Yes</option>
+            </select>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block btn-lg mt-24" id="predictBtn">
+          Predict Dropout Risk
+        </button>
+      </form>
+
+      {% if result %}
+      <div class="result-card"
+           style="background:
+             {% if result.risk_level == 'Low' %}var(--risk-low-bg)
+             {% elif result.risk_level == 'Medium' %}var(--risk-med-bg)
+             {% else %}var(--risk-high-bg){% endif %};
+             border-color:
+             {% if result.risk_level == 'Low' %}var(--risk-low)
+             {% elif result.risk_level == 'Medium' %}var(--risk-med)
+             {% else %}var(--risk-high){% endif %};">
+        <div class="result-top">
+          <div>
+            <div class="panel-sub" style="margin-bottom:4px;">Prediction for</div>
+            <h2 style="font-size:1.3rem;">{{ result.student_name }}</h2>
+          </div>
+          <span class="risk-badge {{ result.risk_level }}">
+            {{ result.risk_level }} Risk &middot; {{ result.probability }}%
+          </span>
+        </div>
+
+        <p style="font-size:0.9rem; color:var(--ink-soft); line-height:1.6;">
+          {% if result.risk_level == 'High' %}
+            This student shows strong signals of dropout risk. Immediate intervention is recommended.
+          {% elif result.risk_level == 'Medium' %}
+            This student shows moderate risk. Proactive monitoring and light-touch support are advised.
+          {% else %}
+            This student currently shows low dropout risk. Continue routine monitoring.
+          {% endif %}
+        </p>
+
+        <div class="rec-list">
+          {% for rec in result.recommendations %}
+          <div class="rec-item">
+            <div class="rec-icon">
+              {% if rec.icon == 'calendar' %}📅{% elif rec.icon == 'book' %}📘{% elif rec.icon == 'clock' %}⏱️{% elif rec.icon == 'heart' %}💙{% elif rec.icon == 'money' %}💰{% elif rec.icon == 'balance' %}⚖️{% elif rec.icon == 'map' %}🗺️{% else %}✅{% endif %}
+            </div>
+            <div>
+              <h4>{{ rec.title }}</h4>
+              <p>{{ rec.detail }}</p>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- ===================== SIDE PANEL ===================== -->
+    <div class="side-panel">
+
+      <div class="panel">
+        <h2>Model Snapshot</h2>
+        <p class="panel-sub">Best proposed model: <strong>{{ best_model_name }}</strong></p>
+        <div class="mini-stat-row">
+          <div class="mini-stat">
+            <b style="color:var(--c1)">{{ metrics.proposed_system[best_model_name].accuracy }}%</b>
+            <span>Accuracy</span>
+          </div>
+          <div class="mini-stat">
+            <b style="color:var(--c5)">{{ metrics.proposed_system[best_model_name].precision }}%</b>
+            <span>Precision</span>
+          </div>
+          <div class="mini-stat">
+            <b style="color:var(--c9)">{{ metrics.proposed_system[best_model_name].recall }}%</b>
+            <span>Recall</span>
+          </div>
+          <div class="mini-stat">
+            <b style="color:var(--c12)">{{ metrics.proposed_system[best_model_name].f1_score }}%</b>
+            <span>F1 Score</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>Top Risk Drivers</h2>
+        <p class="panel-sub">Feature importance from the trained model</p>
+        {% set colors = ['var(--c1)','var(--c2)','var(--c3)','var(--c5)','var(--c9)','var(--c11)','var(--c12)','var(--c13)'] %}
+        {% for feat, val in feature_importance.items() %}
+          {% if loop.index <= 8 %}
+          <div class="imp-row">
+            <div class="imp-row-top"><span>{{ feat.replace('_',' ') }}</span><b>{{ (val*100)|round(1) }}%</b></div>
+            <div class="imp-track"><div class="imp-fill" data-bar-width="{{ (val*100)|round(1) }}" style="width:0; background:{{ colors[loop.index0 % colors|length] }};"></div></div>
+          </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+
+      <div class="panel">
+        <h2>Model Comparison</h2>
+        <p class="panel-sub">Accuracy across all trained models</p>
+        <canvas id="modelChart" height="220"></canvas>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<script>
+  // ---- Prediction form submit loading state ----
+  const predictForm = document.getElementById('predictForm');
+  const predictBtn = document.getElementById('predictBtn');
+  predictForm.addEventListener('submit', () => {
+    predictBtn.textContent = 'Analyzing...';
+    predictBtn.disabled = true;
+  });
+
+  // ---- Model comparison chart (existing vs proposed accuracy) ----
+  const metricsData = {{ metrics|tojson }};
+  const existing = metricsData.existing_system;
+  const proposed = metricsData.proposed_system;
+
+  const labels = [...Object.keys(existing), ...Object.keys(proposed)];
+  const accuracies = [...Object.values(existing).map(m => m.accuracy), ...Object.values(proposed).map(m => m.accuracy)];
+  const barColors = [
+    '#4C3CF0','#3C6DF0','#3CA8F0','#3CD4E0','#3CE0AE','#4CE06B',
+    '#F0A83C','#F0793C','#F0523C'
+  ];
+
+  const ctx = document.getElementById('modelChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Accuracy (%)',
+        data: accuracies,
+        backgroundColor: labels.map((_, i) => barColors[i % barColors.length]),
+        borderRadius: 8,
+        maxBarThickness: 26
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { beginAtZero: true, max: 100, grid: { color: '#EFF1FB' } },
+        x: { grid: { display: false }, ticks: { font: { size: 10 } } }
+      }
+    }
+  });
+
+  // ---- Scroll to result card after prediction ----
+  {% if result %}
+  document.addEventListener('DOMContentLoaded', () => {
+    const card = document.querySelector('.result-card');
+    if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
+  {% endif %}
+</script>
+{% endblock %}

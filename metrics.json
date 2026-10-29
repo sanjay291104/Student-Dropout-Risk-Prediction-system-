@@ -1,0 +1,151 @@
+{
+  "existing_system": {
+    "Logistic Regression": {
+      "accuracy": 81.2,
+      "precision": 66.9,
+      "recall": 39.92,
+      "f1_score": 50.0,
+      "confusion_matrix": [
+        [
+          1436,
+          93
+        ],
+        [
+          283,
+          188
+        ]
+      ]
+    },
+    "Decision Tree": {
+      "accuracy": 79.65,
+      "precision": 61.94,
+      "recall": 35.24,
+      "f1_score": 44.93,
+      "confusion_matrix": [
+        [
+          1427,
+          102
+        ],
+        [
+          305,
+          166
+        ]
+      ]
+    },
+    "KNN": {
+      "accuracy": 78.35,
+      "precision": 58.26,
+      "recall": 28.45,
+      "f1_score": 38.23,
+      "confusion_matrix": [
+        [
+          1433,
+          96
+        ],
+        [
+          337,
+          134
+        ]
+      ]
+    },
+    "Naive Bayes": {
+      "accuracy": 77.3,
+      "precision": 51.4,
+      "recall": 66.24,
+      "f1_score": 57.88,
+      "confusion_matrix": [
+        [
+          1234,
+          295
+        ],
+        [
+          159,
+          312
+        ]
+      ]
+    },
+    "SVM": {
+      "accuracy": 80.45,
+      "precision": 67.09,
+      "recall": 33.33,
+      "f1_score": 44.54,
+      "confusion_matrix": [
+        [
+          1452,
+          77
+        ],
+        [
+          314,
+          157
+        ]
+      ]
+    },
+    "ANN": {
+      "accuracy": 76.25,
+      "precision": 49.54,
+      "recall": 45.44,
+      "f1_score": 47.4,
+      "confusion_matrix": [
+        [
+          1311,
+          218
+        ],
+        [
+          257,
+          214
+        ]
+      ]
+    }
+  },
+  "proposed_system": {
+    "Decision Tree": {
+      "accuracy": 78.15,
+      "precision": 56.75,
+      "recall": 30.36,
+      "f1_score": 39.56,
+      "confusion_matrix": [
+        [
+          1420,
+          109
+        ],
+        [
+          328,
+          143
+        ]
+      ]
+    },
+    "Random Forest": {
+      "accuracy": 80.6,
+      "precision": 65.66,
+      "recall": 36.94,
+      "f1_score": 47.28,
+      "confusion_matrix": [
+        [
+          1438,
+          91
+        ],
+        [
+          297,
+          174
+        ]
+      ]
+    },
+    "XGBoost": {
+      "accuracy": 80.4,
+      "precision": 62.7,
+      "recall": 41.4,
+      "f1_score": 49.87,
+      "confusion_matrix": [
+        [
+          1413,
+          116
+        ],
+        [
+          276,
+          195
+        ]
+      ]
+    }
+  },
+  "best_model": "XGBoost"
+}

@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% block title %}Create Account | Pulse.edu{% endblock %}
+
+{% block content %}
+<section class="auth-shell">
+  <div class="auth-card">
+    <div class="auth-head">
+      <span class="brand-mark-lg">
+        <svg width="42" height="42" viewBox="0 0 30 30" fill="none">
+          <circle cx="15" cy="15" r="13" stroke="url(#g3)" stroke-width="2.5"/>
+          <path d="M15 7v8l5.5 3.2" stroke="url(#g3)" stroke-width="2.5" stroke-linecap="round"/>
+          <defs><linearGradient id="g3" x1="0" y1="0" x2="30" y2="30"><stop stop-color="#4C3CF0"/><stop offset="1" stop-color="#F0509B"/></linearGradient></defs>
+        </svg>
+      </span>
+      <h1>Create your account</h1>
+      <p>Set up faculty access to the dropout prediction dashboard.</p>
+    </div>
+
+    <form method="POST" action="{{ url_for('register') }}" id="registerForm" novalidate>
+      <div class="form-group">
+        <label for="full_name">Full name</label>
+        <input type="text" class="form-control" id="full_name" name="full_name" placeholder="e.g. Dr. S. Sanjeeva Rao" required>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email address</label>
+        <input type="email" class="form-control" id="email" name="email" placeholder="you@institution.edu" required>
+      </div>
+
+      <div class="form-group">
+        <label for="institution">Institution / Department</label>
+        <input type="text" class="form-control" id="institution" name="institution" placeholder="e.g. TKREC - Dept. of CSE">
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div class="password-wrap">
+          <input type="password" class="form-control" id="password" name="password" placeholder="Create a strong password" required>
+          <button type="button" class="password-toggle" id="togglePwd">SHOW</button>
+        </div>
+        <div class="strength-meter">
+          <div class="strength-seg" id="seg1"></div>
+          <div class="strength-seg" id="seg2"></div>
+          <div class="strength-seg" id="seg3"></div>
+          <div class="strength-seg" id="seg4"></div>
+        </div>
+        <div class="field-hint" id="strengthText">Use 8+ characters with a number and symbol.</div>
+      </div>
+
+      <div class="form-group">
+        <label for="confirm_password">Confirm password</label>
+        <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Re-enter your password" required>
+        <div class="field-error" id="matchError">Passwords do not match.</div>
+      </div>
+
+      <div class="checkbox-row">
+        <input type="checkbox" id="terms" required>
+        <label for="terms">I agree to use student data responsibly and in line with my institution's policy.</label>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block btn-lg">Create Account</button>
+    </form>
+
+    <div class="auth-foot">
+      Already have an account? <a href="{{ url_for('login') }}">Log in</a>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  const toggleBtn = document.getElementById('togglePwd');
+  const pwdInput = document.getElementById('password');
+  toggleBtn.addEventListener('click', () => {
+    const isPwd = pwdInput.type === 'password';
+    pwdInput.type = isPwd ? 'text' : 'password';
+    toggleBtn.textContent = isPwd ? 'HIDE' : 'SHOW';
+  });
+
+  // Password strength meter
+  const segs = [document.getElementById('seg1'), document.getElementById('seg2'), document.getElementById('seg3'), document.getElementById('seg4')];
+  const strengthText = document.getElementById('strengthText');
+  const colors = ['#F0523C', '#F0A83C', '#F0D23C', '#22C58B'];
+  const labels = ['Weak', 'Fair', 'Good', 'Strong'];
+
+  function scorePassword(pwd) {
+    let score = 0;
+    if (pwd.length >= 8) score++;
+    if (/[A-Z]/.test(pwd) && /[a-z]/.test(pwd)) score++;
+    if (/[0-9]/.test(pwd)) score++;
+    if (/[^A-Za-z0-9]/.test(pwd)) score++;
+    return score;
+  }
+
+  pwdInput.addEventListener('input', () => {
+    const score = scorePassword(pwdInput.value);
+    segs.forEach((seg, i) => {
+      seg.style.background = i < score ? colors[Math.max(score - 1, 0)] : '';
+    });
+    strengthText.textContent = pwdInput.value.length === 0
+      ? 'Use 8+ characters with a number and symbol.'
+      : `Strength: ${labels[Math.max(score - 1, 0)]}`;
+  });
+
+  // Confirm password match check
+  const form = document.getElementById('registerForm');
+  const confirmInput = document.getElementById('confirm_password');
+  const matchError = document.getElementById('matchError');
+  form.addEventListener('submit', (e) => {
+    if (pwdInput.value !== confirmInput.value) {
+      e.preventDefault();
+      matchError.style.display = 'block';
+      confirmInput.style.borderColor = '#F0523C';
+    }
+  });
+  confirmInput.addEventListener('input', () => {
+    matchError.style.display = 'none';
+    confirmInput.style.borderColor = '';
+  });
+</script>
+{% endblock %}
